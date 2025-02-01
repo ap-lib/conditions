@@ -3,7 +3,6 @@
   "type": "library",
   "homepage": "https://github.com/ap-lib/conditions",
   "license": "MIT",
-  "version": "2.0.0",
   "authors": [
     {
       "name": "Anton Panfilov"
