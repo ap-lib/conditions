@@ -4,6 +4,11 @@ namespace AP\Conditions;
 
 use UnexpectedValueException;
 
+/**
+ * Enforces minimum and maximum constraints on element occurrences.
+ * - Validates `min` and `max` values to prevent invalid ranges.
+ * - Optionally ignores duplicate elements.
+ */
 readonly class Limit extends Base
 {
     public ?int $min;
@@ -35,7 +40,7 @@ readonly class Limit extends Base
         $this->min = $min;
     }
 
-    public function check_hashmap(array $hashmap): bool
+    protected function checkPrepared(PreparedElements $elements): bool
     {
         if (!is_int($this->max) && !is_int($this->min)) {
             return true;
@@ -44,8 +49,8 @@ readonly class Limit extends Base
         $exist = 0;
 
         foreach ($this->index as $hash) {
-            if (key_exists($hash, $hashmap)) {
-                $exist += $this->ignore_duplicates ? 1 : $hashmap[$hash];
+            if (key_exists($hash, $elements->hashmap)) {
+                $exist += $this->ignore_duplicates ? 1 : $elements->hashmap[$hash];
                 // by performance reason, check after iteration code, copy twice
                 if (is_int($this->max) && $exist > $this->max) {
                     return false;
@@ -57,7 +62,7 @@ readonly class Limit extends Base
         }
 
         foreach ($this->nested as $condition) {
-            if ($condition->check_hashmap($hashmap)) {
+            if ($condition->checkPrepared($elements)) {
                 $exist++;
                 // by performance reason, check after iteration code, copy twice
                 if (is_int($this->max) && $exist > $this->max) {

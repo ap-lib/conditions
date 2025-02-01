@@ -2,24 +2,21 @@
 
 namespace AP\Conditions;
 
+/**
+ * Ensures that all elements exist in the original array before passing the condition.
+ */
 readonly class All extends Base
 {
-    /**
-     * @param array<string,int> $hashmap
-     * key   = <string> self::make_hashmap_key(value),
-     * value = <int> elements count on the original list
-     * @return bool
-     */
-    public function check_hashmap(array $hashmap): bool
+    protected function checkPrepared(PreparedElements $elements): bool
     {
         foreach ($this->index as $hash) {
-            if (!key_exists($hash, $hashmap)) {
+            if (!key_exists($hash, $elements->hashmap)) {
                 return false;
             }
         }
 
         foreach ($this->nested as $condition) {
-            if (!$condition->check_hashmap($hashmap)) {
+            if (!$condition->checkPrepared($elements)) {
                 return false;
             }
         }

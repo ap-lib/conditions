@@ -4,13 +4,14 @@ namespace AP\Conditions;
 
 interface ConditionInterface
 {
-    public function check(array $elements): bool;
-
     /**
-     * @param array<string,int> $hashmap
-     * @return bool
+     * For performance reasons, it's beneficial to store element conditions in a hashmap.
+     *
+     * To optimize nested checks, the code processes input data once and prepares a hashmap
+     * for lookups. This preprocessed data is then reused across all nested elements,
+     * improving efficiency.
      */
-    public function check_hashmap(array $hashmap): bool;
+    public function check(array|PreparedElements $elements): bool;
 
     /**
      * Retrieves all used options recursively.
@@ -21,10 +22,10 @@ interface ConditionInterface
      *
      * @return array
      */
-    public function get_all_options_recursive(): array;
+    public function getAllOptionsRecursive(): array;
 
     /**
      * @return array
      */
-    public function get_elements(): array;
+    public function getElements(): array;
 }

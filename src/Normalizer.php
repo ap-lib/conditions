@@ -66,7 +66,7 @@ readonly class Normalizer
         $this->conditions_hashmap = $conditions_hashmap;
     }
 
-    private function validate_normalized_elements_exception(mixed $element, bool $root = true): mixed
+    private function validateNormalizedElementsException(mixed $element, bool $root = true): mixed
     {
         if (is_int($element) || is_string($element) || is_bool($element)) {
             return $element;
@@ -77,7 +77,7 @@ readonly class Normalizer
             }
 
             foreach ($element as $v) {
-                $this->validate_normalized_elements_exception($v, false);
+                $this->validateNormalizedElementsException($v, false);
             }
             return $element;
         }
@@ -102,7 +102,7 @@ readonly class Normalizer
 
         $element_normalizer = $this->element_normalizer;
 
-        foreach ($condition->get_elements() as $element) {
+        foreach ($condition->getElements() as $element) {
             if ($element instanceof ConditionInterface) {
                 $data[] = $this->normalize($element);
             } else {
@@ -110,7 +110,7 @@ readonly class Normalizer
                     $element = $element_normalizer($element);
                 }
 
-                $data[] = self::validate_normalized_elements_exception($element);
+                $data[] = self::validateNormalizedElementsException($element);
             }
         }
 

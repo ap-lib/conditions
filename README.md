@@ -1,4 +1,4 @@
-# AP Conditions Library
+# AP\Conditions
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -43,7 +43,7 @@ You have a function to get all approved companies by phone number:
 /**
  * @return int[]
  */
-function get_consents(int $phone): array;
+function getConsents(int $phone): array;
 ```
 You now intend to use only clients who have provided consent for the following conditions:
 
@@ -78,12 +78,12 @@ we can describe this logic on json format:
 to check client by json  conditions we can use it:
 
 ```php
-function load_json_conditions(): string
+function loadJsonConditions(): string
 {
     return '{"type":"all","data":[{"type":"least_one","data":[1,11]},{"type":"least_one","data":[2,12]},3,4,{"type":"least_one","data":[5,15,25]}]}';
 }
 
-function get_consents(int $phone): array
+function getConsents(int $phone): array
 {
     return match ($phone) {
         1234567890 => [1, 12, 3, 4, 25, 8, 80],
@@ -93,14 +93,14 @@ function get_consents(int $phone): array
     };
 }
 
-$json_conditions = load_json_conditions();
+$json_conditions = loadJsonConditions();
 $normalizer      = new Normalizer();
 $conditions      = $normalizer->denormalize(json_decode($json_conditions, true));
 
-$conditions->check(get_consents(1234567890)); // true
-$conditions->check(get_consents(9876543210)); // true
-$conditions->check(get_consents(9998887777)); // false
-$conditions->check(get_consents(1112223333)); // false
+$conditions->check(getConsents(1234567890)); // true
+$conditions->check(getConsents(9876543210)); // true
+$conditions->check(getConsents(9998887777)); // false
+$conditions->check(getConsents(1112223333)); // false
 ```
 
 

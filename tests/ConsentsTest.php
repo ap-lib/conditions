@@ -23,7 +23,7 @@ final class ConsentsTest extends TestCase
         $have_consents = [1, 12, 3, 4, 25, 8, 80];
         $can_use       = $required_consents->check($have_consents);
 
-        $used_options = $required_consents->get_all_options_recursive();
+        $used_options = $required_consents->getAllOptionsRecursive();
 
         $this->assertTrue($can_use); // test use case
         $this->assertEqualsCanonicalizing([1, 11, 2, 12, 3, 4, 5, 15, 25], $used_options); // test list used on condition elements
@@ -49,7 +49,10 @@ final class ConsentsTest extends TestCase
 
         $denormalized_required_consents = $normalaizer->denormalize($normalized_required_consents);
 
-        $this->assertEqualsCanonicalizing($original_required_consents, $denormalized_required_consents);
+        $this->assertEquals(
+            serialize($original_required_consents),
+            serialize($denormalized_required_consents)
+        );
     }
 
     public function testA(): void
